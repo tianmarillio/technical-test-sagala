@@ -1,13 +1,14 @@
 package repositories
 
 import (
+	"github.com/tianmarillio/technical-test-sagala/src/dtos"
 	"github.com/tianmarillio/technical-test-sagala/src/models"
 	"gorm.io/gorm"
 )
 
 type TaskRepository interface {
 	Create(*models.Task) (*models.Task, error)
-	FindAll() ([]models.Task, error)
+	FindAll(queryParams dtos.TaskQueryParams) ([]models.Task, error)
 	FindByID(id uint) (*models.Task, error)
 	Update(task *models.Task) error
 	Delete(id uint) error
@@ -33,9 +34,16 @@ func (r *GormTaskRepository) Create(task *models.Task) (*models.Task, error) {
 	return task, nil
 }
 
-func (r *GormTaskRepository) FindAll() ([]models.Task, error) {
+func (r *GormTaskRepository) FindAll(queryParams dtos.TaskQueryParams) ([]models.Task, error) {
 	var tasks []models.Task
-	err := r.db.Find(&tasks).Error
+
+	query := r.db.Model(&tasks)
+
+	if queryParams.Sort != "" {
+		query.Order(queryParams.Sort)
+	}
+
+	err := query.Find(&tasks).Error
 
 	return tasks, err
 }

@@ -2,7 +2,6 @@ package services
 
 import (
 	"errors"
-	"time"
 
 	"github.com/jinzhu/now"
 	"github.com/tianmarillio/technical-test-sagala/src/dtos"
@@ -19,34 +18,43 @@ func NewTaskService(r repositories.TaskRepository) *TaskService {
 }
 
 func (s *TaskService) CreateTask(dto dtos.CreateTaskDTO) (*models.Task, error) {
-	var err error
-	var dueDate time.Time
-
-	dueDate, err = now.Parse(dto.DueDate)
-	if err != nil {
-		return nil, err
-	}
-
 	task := &models.Task{
-		Title:       dto.Title,
-		Description: dto.Description,
-		// FIXME:
-		Status:  models.TaskStatus(dto.Status),
-		DueDate: dueDate,
+		Title: dto.Title,
 	}
 
-	task, err = s.repository.Create(task)
+	if dto.Description != nil {
+		task.Description = *dto.Description
+	}
+
+	// Validate dto.Status enum
+	if dto.Status != nil {
+		status := models.TaskStatus(*dto.Status)
+		task.Status = status
+	} else {
+		defaultStatus := models.TaskStatusWaitingList
+		task.Status = defaultStatus
+	}
+
+	// Parse dueDate from string
+	if dto.DueDate != nil {
+		dueDate, err := now.Parse(*dto.DueDate)
+		if err != nil {
+			return nil, err
+		}
+
+		task.DueDate = dueDate
+	}
+
+	task, err := s.repository.Create(task)
 	if err != nil {
 		return nil, err
 	}
 
 	return task, nil
-	// TODO: handle error
-	// TODO: delete printlns
 }
 
-func (s *TaskService) GetTasks() ([]models.Task, error) {
-	return s.repository.FindAll()
+func (s *TaskService) GetTasks(queryParams dtos.TaskQueryParams) ([]models.Task, error) {
+	return s.repository.FindAll(queryParams)
 }
 
 func (s *TaskService) GetTask(id uint) (*models.Task, error) {
@@ -72,7 +80,8 @@ func (s *TaskService) UpdateTask(id uint, dto dtos.UpdateTaskDTO) error {
 	}
 
 	if dto.Status != nil {
-		task.Status = models.TaskStatus(*dto.Status)
+		status := models.TaskStatus(*dto.Status)
+		task.Status = status
 	}
 
 	if dto.DueDate != nil {

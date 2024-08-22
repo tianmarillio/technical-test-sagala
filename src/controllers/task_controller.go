@@ -17,10 +17,16 @@ func NewTaskController(s *services.TaskService) *TaskController {
 	return &TaskController{service: s}
 }
 
-// FIXME: remove later
-type TaskControllerSuccess struct {
-	Status string `json:"status"`
-}
+// TODO: error handlers
+// TODO: docker
+// TODO: e2e testng
+// FIXME: optional when create: description, due date, status
+// FIXME: use uint for create, update, delete json?
+// FIXME: status validation on app level?
+// TODO:  utils time parser, use UTC
+
+// TODO: README
+// TODO: postman docs
 
 func (c *TaskController) CreateTask(ctx *gin.Context) {
 	var createTaskDto dtos.CreateTaskDTO
@@ -42,10 +48,15 @@ func (c *TaskController) CreateTask(ctx *gin.Context) {
 }
 
 func (c *TaskController) GetTasks(ctx *gin.Context) {
-	tasks, err := c.service.GetTasks()
+	sort := ctx.Query("sort")
+
+	queryParams := dtos.TaskQueryParams{
+		Sort: sort,
+	}
+
+	tasks, err := c.service.GetTasks(queryParams)
 
 	if err != nil {
-		// TODO: error validation
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -94,7 +105,6 @@ func (c *TaskController) DeleteTask(ctx *gin.Context) {
 		return
 	}
 
-	// FIXME: use uint?
 	ctx.JSON(http.StatusCreated, gin.H{
 		"task_id": id,
 	})

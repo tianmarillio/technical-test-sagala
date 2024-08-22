@@ -15,13 +15,13 @@ const (
 )
 
 type Task struct {
-	ID          uint `gorm:"primarykey"`
-	Title       string
-	Description string
-	Status      TaskStatus `gorm:"type:task_status"`
-	DueDate     time.Time
+	ID          uint        `json:"id" gorm:"primarykey"`
+	Title       string      `json:"title"`
+	Description string     `json:"description"`
+	Status      TaskStatus `json:"status" gorm:"type:task_status"`
+	DueDate     time.Time  `json:"due_date"`
 
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt gorm.DeletedAt `gorm:"index"`
+	CreatedAt time.Time      `json:"created_at"`
+	UpdatedAt time.Time      `json:"updated_at"`
+	DeletedAt gorm.DeletedAt `json:"deleted_at" gorm:"index"`
 }
