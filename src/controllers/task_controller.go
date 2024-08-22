@@ -27,6 +27,7 @@ func NewTaskController(s *services.TaskService) *TaskController {
 
 // TODO: README
 // TODO: postman docs
+// TODO: docs format due date, sort
 
 func (c *TaskController) CreateTask(ctx *gin.Context) {
 	var createTaskDto dtos.CreateTaskDTO
@@ -105,7 +106,7 @@ func (c *TaskController) DeleteTask(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{
+	ctx.JSON(http.StatusOK, gin.H{
 		"task_id": id,
 	})
 }

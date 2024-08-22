@@ -11,12 +11,12 @@ import (
 )
 
 func RegisterRoutes(r *gin.Engine, db *gorm.DB) {
-	// Root
+	// root
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})
 	})
 
-	// Tasks
+	// tasks
 	taskRepository := repositories.NewGormTaskRepository(db)
 	taskService := services.NewTaskService(taskRepository)
 	taskController := controllers.NewTaskController(taskService)

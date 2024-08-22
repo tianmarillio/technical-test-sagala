@@ -42,7 +42,7 @@ func (s *TaskService) CreateTask(dto dtos.CreateTaskDTO) (*models.Task, error) {
 			return nil, err
 		}
 
-		task.DueDate = dueDate
+		task.DueDate = &dueDate
 	}
 
 	task, err := s.repository.Create(task)
@@ -90,7 +90,7 @@ func (s *TaskService) UpdateTask(id uint, dto dtos.UpdateTaskDTO) error {
 			return err
 		}
 
-		task.DueDate = dueDate
+		task.DueDate = &dueDate
 	}
 
 	return s.repository.Update(task)
