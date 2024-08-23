@@ -10,7 +10,7 @@
 cp .env.example .env
 ```
 
-- Fill out PORT and database configs
+- Fill out .env file configurations: server Port and database configs (database host, user, password, port, name)
 
 - Install dependencies
 
@@ -23,7 +23,7 @@ go mod tidy
 - Run development server
 
 ```
-go run ./src/main.go
+go run main.go
 ```
 
 ## Testing
@@ -33,12 +33,12 @@ go run ./src/main.go
 Provided end-to-end (e2e) API testing by running command:
 
 ```
-go test ./...
+go test ./test/e2e/...
 ```
 
 ## API Documentation & Important Notes
 
-- API Documentation:
+- API Documentation: https://documenter.getpostman.com/view/15537853/2sAXjDfbVi
 
 - Valid "status" formats:
   - waiting_list (default)
@@ -51,3 +51,7 @@ go test ./...
   - "1999-12-12 12"
   - "1999-12-12 12:20"
   - "1999-12-12 12:20:21"
+
+- sort query for Find All examples:
+  - "due_date asc"
+  - "status desc"

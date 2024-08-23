@@ -17,18 +17,6 @@ func NewTaskController(s *services.TaskService) *TaskController {
 	return &TaskController{service: s}
 }
 
-// TODO: error handlers
-// TODO: docker
-// TODO: e2e testng
-// FIXME: optional when create: description, due date, status
-// FIXME: use uint for create, update, delete json?
-// FIXME: status validation on app level?
-// TODO:  utils time parser, use UTC
-
-// TODO: README
-// TODO: postman docs
-// TODO: docs format due date, sort
-
 func (c *TaskController) CreateTask(ctx *gin.Context) {
 	var createTaskDto dtos.CreateTaskDTO
 
